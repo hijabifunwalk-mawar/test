@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pink October Walk 2026</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        pink: {
+                            50: '#fdf2f8',
+                            100: '#fce7f3',
+                            500: '#ec4899',
+                            600: '#db2777',
+                            700: '#be185d',
+                            800: '#9d174d',
+                        },
+                        dark: '#1f2937'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f9fafb; scroll-behavior: smooth; }
+        .hidden-view { display: none !important; }
+        .gradient-text {
+            background: linear-gradient(to right, #ec4899, #be185d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-bg {
+            background: linear-gradient(135deg, #fce7f3 0%, #fdf2f8 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(236,72,153,0.1) 0%, transparent 50%);
+            animation: pulseBg 15s infinite linear;
+        }
+        @keyframes pulseBg {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #fbcfe8; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #f472b6; }
+        
+        /* Toast Notifications */
+        #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 9999; }
+        .toast { background: white; border-left: 4px solid #ec4899; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); padding: 16px; margin-top: 10px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; min-width: 300px; animation: slideIn 0.3s ease-out forwards; }
+        .toast.success { border-color: #10b981; }
+        .toast.error { border-color: #ef4444; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+
+        /* Loader */
+        .loader { border: 3px solid #f3f3f3; border-top: 3px solid #ec4899; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; display: inline-block; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        /* Certificate Print Styles */
+        @media print {
+            body * { visibility: hidden; }
+            #certificate-print-area, #certificate-print-area * { visibility: visible; }
+            #certificate-print-area { position: absolute; left: 0; top: 0; width: 100%; }
+        }
+    </style>
+</head>
+<body class="text-gray-800 antialiased flex flex-col min-h-screen">
+
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center cursor-pointer" onclick="navigate('home')">
+                    <i class="fa-solid fa-ribbon text-pink-500 text-3xl mr-2"></i>
+                    <span class="font-bold text-xl tracking-tight text-dark">Pink October <span class="text-pink-600">Walk</span></span>
+                </div>
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="#about" class="text-gray-600 hover:text-pink-600 font-medium transition" onclick="navigate('home')">Tentang Program</a>
+                    <a href="#packages" class="text-gray-600 hover:text-pink-600 font-medium transition" onclick="navigate('home')">Pakej</a>
+                    <a href="#" class="text-gray-600 hover:text-pink-600 font-medium transition" onclick="navigate('status')">Semak Pendaftaran</a>
+                    <a href="#" class="text-gray-600 hover:text-pink-600 font-medium transition" onclick="navigate('admin-login')"><i class="fa-solid fa-lock text-sm"></i> Admin</a>
+                    <button onclick="navigate('register')" class="bg-pink-600 hover:bg-pink-700 text-white px-5 py-2 rounded-full font-semibold shadow-md transition transform hover:-translate-y-0.5">Daftar Sekarang</button>
+                </div>
+                <!-- Mobile Menu Button -->
+                <div class="flex items-center md:hidden">
+                    <button id="mobile-menu-btn" class="text-gray-600 hover:text-pink-600 focus:outline-none">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t pb-4">
+            <div class="px-2 pt-2 space-y-1">
+                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-pink-600 hover:bg-pink-50" onclick="navigate('home'); toggleMobileMenu()">Utama</a>
+                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-pink-600 hover:bg-pink-50" onclick="navigate('status'); toggleMobileMenu()">Semak Pendaftaran</a>
+                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-pink-600 hover:bg-pink-50" onclick="navigate('admin-login'); toggleMobileMenu()">Admin Login</a>
+                <button onclick="navigate('register'); toggleMobileMenu()" class="w-full text-left block px-3 py-2 bg-pink-600 text-white rounded-md text-base font-bold mt-2">Daftar Sekarang</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Global App Loader -->
+    <div id="app-loader" class="fixed inset-0 bg-white bg-opacity-90 z-[100] flex flex-col items-center justify-center">
+        <div class="loader mb-4" style="width: 50px; height: 50px; border-width: 5px;"></div>
+        <p class="text-pink-600 font-semibold animate-pulse">Memuatkan Sistem...</p>
+    </div>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-grow">
+        
+        <div id="view-home" class="view-section">
+            <!-- Hero Section -->
+            <section class="hero-bg py-20 px-4 sm:px-6 lg:px-8 text-center border-b border-pink-100">
+                <div class="max-w-4xl mx-auto relative z-10">
+                    <span class="inline-block py-1 px-3 rounded-full bg-pink-100 text-pink-700 font-semibold text-sm mb-4 border border-pink-200 shadow-sm"><i class="fa-solid fa-bullhorn mr-1"></i> Pendaftaran Kini Dibuka!</span>
+                    <h1 class="text-5xl md:text-7xl font-extrabold text-dark tracking-tight mb-4">
+                        PINK OCTOBER <span class="text-pink-600">WALK 2026</span>
+                    </h1>
+                    <p class="text-xl md:text-2xl text-gray-600 font-medium mb-8">
+                        “Langkah Bersama, Kesedaran Untuk Semua”
+                    </p>
+                    
+                    <div class="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-xl inline-block mb-10 border border-white">
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                            <div>
+                                <i class="fa-regular fa-calendar text-2xl text-pink-500 mb-2"></i>
+                                <p class="text-sm text-gray-500 uppercase tracking-wider">Tarikh</p>
+                                <p class="font-bold text-gray-800">31 Oktober 2026</p>
+                            </div>
+                            <div>
+                                <i class="fa-regular fa-clock text-2xl text-pink-500 mb-2"></i>
+                                <p class="text-sm text-gray-500 uppercase tracking-wider">Masa</p>
+                                <p class="font-bold text-gray-800">7.00 Pagi</p>
+                            </div>
+                            <div>
+                                <i class="fa-solid fa-location-dot text-2xl text-pink-500 mb-2"></i>
+                                <p class="text-sm text-gray-500 uppercase tracking-wider">Tempat</p>
+                                <p class="font-bold text-gray-800 text-sm">Kompleks Sukan<br>Negeri Terengganu</p>
+                            </div>
+                            <div>
+                                <i class="fa-solid fa-users text-2xl text-pink-500 mb-2"></i>
+                                <p class="text-sm text-gray-500 uppercase tracking-wider">Penyertaan</p>
+                                <p class="font-bold text-gray-800">Terbuka</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Countdown -->
+                    <div class="mb-10">
+                        <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-widest mb-3">Masa Tinggal</h3>
+                        <div class="flex justify-center gap-4" id="countdown-timer">
+                            <div class="bg-white shadow-md rounded-lg p-3 min-w-[70px]"><span id="cd-days" class="text-2xl font-bold text-pink-600">00</span><p class="text-xs text-gray-500">HARI</p></div>
+                            <div class="bg-white shadow-md rounded-lg p-3 min-w-[70px]"><span id="cd-hours" class="text-2xl font-bold text-pink-600">00</span><p class="text-xs text-gray-500">JAM</p></div>
+                            <div class="bg-white shadow-md rounded-lg p-3 min-w-[70px]"><span id="cd-mins" class="text-2xl font-bold text-pink-600">00</span><p class="text-xs text-gray-500">MINIT</p></div>
+                            <div class="bg-white shadow-md rounded-lg p-3 min-w-[70px]"><span id="cd-secs" class="text-2xl font-bold text-pink-600">00</span><p class="text-xs text-gray-500">SAAT</p></div>
+                        </div>
+                    </div>
+
+                    <button onclick="navigate('register')" class="bg-pink-600 hover:bg-pink-700 text-white text-xl px-10 py-4 rounded-full font-bold shadow-lg transition transform hover:scale-105">
+                        DAFTAR SEKARANG
+                    </button>
+                </div>
+            </section>
+
+            <!-- Packages Section -->
+            <section id="packages" class="py-20 bg-white">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl md:text-4xl font-bold text-dark mb-4">Pilih Pakej Anda</h2>
+                        <p class="text-gray-600 max-w-2xl mx-auto">Sertai kami dalam menyokong kesedaran kanser payudara. Pilih pakej yang bersesuaian dengan anda.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-center" id="package-cards-container">
+                        <!-- Rendered by JS -->
+                    </div>
+                    
+                    <div class="flex justify-center mt-8 gap-8">
+                         <div class="w-full md:w-1/3" id="package-card-d"></div>
+                         <div class="w-full md:w-1/3" id="package-card-e"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Registration Steps -->
+            <section class="py-20 bg-gray-50">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl font-bold text-dark mb-4">Cara Pendaftaran</h2>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <div class="w-16 h-16 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">1</div>
+                            <h3 class="font-bold text-lg mb-2">Pilih Pakej & Isi Borang</h3>
+                            <p class="text-gray-500 text-sm">Pilih pakej kegemaran anda (Individu atau Berkumpulan) dan isi maklumat dengan lengkap.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <div class="w-16 h-16 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">2</div>
+                            <h3 class="font-bold text-lg mb-2">Buat Pembayaran</h3>
+                            <p class="text-gray-500 text-sm">Bayar melalui QR Pay atau Bank Transfer dan muat naik bukti resit ke dalam sistem.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <div class="w-16 h-16 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">3</div>
+                            <h3 class="font-bold text-lg mb-2">Terima Pengesahan</h3>
+                            <p class="text-gray-500 text-sm">Dapatkan ID pendaftaran unik anda dan semak status kelulusan dari pihak admin.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div id="view-register" class="view-section hidden-view bg-gray-50 py-10">
+            <div class="max-w-4xl mx-auto px-4">
+                <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-pink-100">
+                    
+                    <!-- Form Header -->
+                    <div class="bg-gradient-to-r from-pink-600 to-pink-500 px-6 py-8 text-white text-center">
+                        <h2 class="text-3xl font-bold mb-2">Borang Pendaftaran</h2>
+                        <p class="text-pink-100">Pink October Walk 2026</p>
+                    </div>
+
+                    <div class="p-6 md:p-10">
+                        <!-- Step Indicator -->
+                        <div class="flex justify-between items-center mb-8 relative">
+                            <div class="absolute left-0 top-1/2 w-full h-1 bg-gray-200 -z-10 transform -translate-y-1/2"></div>
+                            <div class="w-10 h-10 rounded-full bg-pink-600 text-white flex items-center justify-center font-bold shadow-md" id="step1-ind">1</div>
+                            <div class="w-10 h-10 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center font-bold border-2 border-white shadow-sm" id="step2-ind">2</div>
+                            <div class="w-10 h-10 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center font-bold border-2 border-white shadow-sm" id="step3-ind">3</div>
+                        </div>
+
+                        <!-- Step 1: Participants Details -->
+                        <div id="reg-step-1">
+                            <div class="flex justify-between items-center mb-6">
+                                <h3 class="text-xl font-bold text-dark border-b-2 border-pink-500 pb-2 inline-block">Maklumat Peserta</h3>
+                                <div class="flex gap-2">
+                                    <button onclick="setRegType('individual')" id="btn-type-ind" class="px-4 py-2 bg-pink-600 text-white rounded-md text-sm font-semibold transition">Individu</button>
+                                    <button onclick="setRegType('group')" id="btn-type-grp" class="px-4 py-2 bg-gray-200 text-gray-700 hover:bg-gray-300 rounded-md text-sm font-semibold transition">Berkumpulan</button>
+                                </div>
+                            </div>
+
+                            <div id="participants-container" class="space-y-6">
+                                <!-- Participant forms injected here -->
+                            </div>
+
+                            <div id="group-add-btn-container" class="mt-4 hidden text-center">
+                                <button type="button" onclick="addParticipantForm()" class="text-pink-600 font-semibold hover:text-pink-800 bg-pink-50 px-4 py-2 rounded-lg border border-pink-200 transition">
+                                    <i class="fa-solid fa-plus mr-1"></i> Tambah Peserta
+                                </button>
+                            </div>
+
+                            <div class="mt-8 flex justify-end">
+                                <button type="button" onclick="goToStep2()" class="bg-dark hover:bg-black text-white px-8 py-3 rounded-lg font-bold transition flex items-center">
+                                    Seterusnya <i class="fa-solid fa-arrow-right ml-2"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Payment -->
+                        <div id="reg-step-2" class="hidden">
+                             <h3 class="text-xl font-bold text-dark border-b-2 border-pink-500 pb-2 inline-block mb-6">Pembayaran</h3>
+                             
+                             <div class="bg-pink-50 rounded-xl p-6 mb-8 flex justify-between items-center border border-pink-100">
+                                 <div>
+                                     <p class="text-sm text-gray-600 mb-1">Jumlah Perlu Dibayar</p>
+                                     <p class="text-3xl font-bold text-pink-600" id="payment-total-display">RM 0</p>
+                                 </div>
+                                 <div class="text-right">
+                                     <p class="text-sm text-gray-600 mb-1">Jumlah Peserta</p>
+                                     <p class="text-xl font-bold text-dark" id="payment-count-display">0</p>
+                                 </div>
+                             </div>
+
+                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                                 <!-- QR Pay -->
+                                 <div class="border-2 border-gray-200 rounded-xl p-6 text-center hover:border-pink-500 cursor-pointer transition" onclick="selectPaymentMethod('qr')" id="pm-qr">
+                                     <i class="fa-solid fa-qrcode text-4xl text-gray-400 mb-3" id="pm-qr-icon"></i>
+                                     <h4 class="font-bold text-lg mb-2">DuitNow QR</h4>
+                                     <div id="qr-code-container" class="hidden mt-4">
+                                         <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=DUMMY_QR_PAYMENT_DATA" alt="QR Pay" class="mx-auto rounded-lg shadow-sm w-32 h-32">
+                                         <p class="text-xs text-gray-500 mt-2">Imbas untuk bayar</p>
+                                     </div>
+                                 </div>
+                                 <!-- Bank Transfer -->
+                                 <div class="border-2 border-gray-200 rounded-xl p-6 text-center hover:border-pink-500 cursor-pointer transition" onclick="selectPaymentMethod('bank')" id="pm-bank">
+                                     <i class="fa-solid fa-building-columns text-4xl text-gray-400 mb-3" id="pm-bank-icon"></i>
+                                     <h4 class="font-bold text-lg mb-2">Bank Transfer</h4>
+                                     <div id="bank-details-container" class="hidden mt-4 text-sm text-gray-600 bg-gray-50 p-3 rounded-lg text-left">
+                                         <p>Bank: <span class="font-bold text-dark" id="admin-bank-name">Bank Islam</span></p>
+                                         <p>Akaun: <span class="font-bold text-dark" id="admin-bank-acc">1234567890</span></p>
+                                         <p>Nama: <span class="font-bold text-dark" id="admin-bank-holder">Penganjur POW</span></p>
+                                     </div>
+                                 </div>
+                             </div>
+
+                             <!-- Upload Form -->
+                             <div class="bg-gray-50 p-6 rounded-xl border border-gray-200 mb-8" id="upload-section">
+                                 <h4 class="font-bold text-dark mb-4"><i class="fa-solid fa-cloud-arrow-up text-pink-500 mr-2"></i> Muat Naik Bukti Pembayaran</h4>
+                                 
+                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                     <div>
+                                         <label class="block text-sm font-medium text-gray-700 mb-1">Tarikh Pembayaran *</label>
+                                         <input type="date" id="pay-date" class="w-full px-4 py-2 border rounded-md focus:ring-pink-500 focus:border-pink-500" required>
+                                     </div>
+                                     <div>
+                                         <label class="block text-sm font-medium text-gray-700 mb-1">No. Rujukan / Transaksi *</label>
+                                         <input type="text" id="pay-ref" class="w-full px-4 py-2 border rounded-md focus:ring-pink-500 focus:border-pink-500" placeholder="Cth: 123456ABC" required>
+                                     </div>
+                                 </div>
+                                 
+                                 <div class="mt-4">
+                                     <label class="block text-sm font-medium text-gray-700 mb-1">Resit / Screenshot (Max 5MB) *</label>
+                                     <input type="file" id="pay-file" accept="image/jpeg, image/png, image/jpg, application/pdf" class="w-full px-4 py-2 border rounded-md bg-white text-sm" required>
+                                     <p class="text-xs text-red-500 mt-1 italic">Sila pastikan jumlah resit sepadan dengan jumlah pendaftaran (RM <span id="payment-req-amount">0</span>).</p>
+                                 </div>
+                                 <!-- Hidden canvas for image resizing before saving to Firestore -->
+                                 <canvas id="resize-canvas" style="display:none;"></canvas>
+                             </div>
+
+                             <div class="flex justify-between mt-8">
+                                <button type="button" onclick="goToStep1()" class="text-gray-500 hover:text-dark font-medium px-4 py-2">
+                                    <i class="fa-solid fa-arrow-left mr-2"></i> Kembali
+                                </button>
+                                <button type="button" onclick="submitRegistration()" id="btn-submit-reg" class="bg-pink-600 hover:bg-pink-700 text-white px-8 py-3 rounded-lg font-bold transition flex items-center shadow-md">
+                                    Hantar Pendaftaran <i class="fa-solid fa-check-circle ml-2"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Success -->
+                        <div id="reg-step-3" class="hidden text-center py-10">
+                            <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <i class="fa-solid fa-check text-5xl text-green-500"></i>
+                            </div>
+                            <h2 class="text-3xl font-bold text-dark mb-2">Pendaftaran Berjaya!</h2>
+                            <p class="text-gray-600 mb-6">Terima kasih kerana menyertai Pink October Walk 2026.</p>
+                            
+                            <div class="bg-gray-50 p-6 rounded-xl border border-gray-200 inline-block text-left mb-8 max-w-md w-full">
+                                <p class="text-sm text-gray-500 uppercase mb-1">ID Pendaftaran Anda</p>
+                                <p class="text-2xl font-black text-pink-600 mb-4 tracking-widest" id="success-reg-id">POW2026-XXXX</p>
+                                
+                                <div class="space-y-2 text-sm border-t pt-4">
+                                    <div class="flex justify-between"><span class="text-gray-500">Ketua Peserta:</span> <span class="font-bold text-dark" id="success-name">-</span></div>
+                                    <div class="flex justify-between"><span class="text-gray-500">Jumlah Bayaran:</span> <span class="font-bold text-dark" id="success-amount">RM -</span></div>
+                                    <div class="flex justify-between"><span class="text-gray-500">Status:</span> <span class="text-yellow-600 font-bold bg-yellow-100 px-2 py-0.5 rounded text-xs">Menunggu Pengesahan</span></div>
+                                </div>
+                            </div>
+
+                            <p class="text-sm text-gray-500 mb-6 italic">Sila simpan ID Pendaftaran ini untuk semakan status dan tuntutan kit.</p>
+
+                            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                                <button onclick="navigate('status')" class="border-2 border-pink-600 text-pink-600 hover:bg-pink-50 px-6 py-2 rounded-full font-semibold transition">
+                                    Semak Status
+                                </button>
+                                <button onclick="window.print()" class="bg-dark hover:bg-black text-white px-6 py-2 rounded-full font-semibold transition shadow-md">
+                                    <i class="fa-solid fa-download mr-2"></i> Resit PDF
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-status" class="view-section hidden-view bg-gray-50 py-20">
+            <div class="max-w-2xl mx-auto px-4">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-dark mb-4">Semak Pendaftaran</h2>
+                    <p class="text-gray-600">Masukkan ID Pendaftaran atau No. Telefon untuk menyemak status.</p>
+                </div>
+
+                <div class="bg-white p-6 md:p-8 rounded-2xl shadow-md border border-gray-100 mb-8">
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <input type="text" id="search-input" placeholder="ID (cth: POW-XXXX) / No. Tel" class="flex-grow px-4 py-3 border rounded-lg focus:ring-pink-500 focus:border-pink-500 text-lg">
+                        <button onclick="checkStatus()" class="bg-pink-600 hover:bg-pink-700 text-white px-8 py-3 rounded-lg font-bold transition shadow-sm whitespace-nowrap">
+                            <i class="fa-solid fa-magnifying-glass mr-2"></i> Semak
+                        </button>
+                    </div>
+                </div>
+
+                <div id="status-result" class="hidden">
+                    <!-- Results populated by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Login -->
+        <div id="view-admin-login" class="view-section hidden-view bg-gray-50 flex items-center justify-center min-h-[70vh]">
+            <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-200 max-w-md w-full text-center">
+                <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fa-solid fa-lock text-gray-500 text-2xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-dark mb-6">Log Masuk Admin</h2>
+                <input type="password" id="admin-pin" placeholder="Masukkan PIN" class="w-full px-4 py-3 border rounded-lg mb-4 text-center text-lg focus:ring-pink-500 focus:border-pink-500">
+                <button onclick="attemptAdminLogin()" class="w-full bg-dark hover:bg-black text-white px-4 py-3 rounded-lg font-bold transition">Log Masuk</button>
+                <p class="text-xs text-gray-400 mt-4">Sistem MVP: Gunakan 'admin2026'</p>
+            </div>
+        </div>
+
+        <!-- Admin Dashboard -->
+        <div id="view-admin-dashboard" class="view-section hidden-view bg-gray-100 min-h-screen pb-10">
+            <!-- Admin Nav -->
+            <div class="bg-dark text-white shadow-md">
+                <div class="max-w-7xl mx-auto px-4 flex justify-between items-center h-16">
+                    <div class="font-bold flex items-center"><i class="fa-solid fa-shield-halved text-pink-500 mr-2"></i> Admin Panel</div>
+                    <div class="flex gap-4">
+                        <button onclick="switchAdminTab('registrations')" class="hover:text-pink-400 text-sm font-medium py-2 admin-tab-btn border-b-2 border-pink-500 text-pink-400" data-target="admin-registrations">Pendaftaran</button>
+                        <button onclick="switchAdminTab('settings')" class="hover:text-pink-400 text-sm font-medium py-2 admin-tab-btn border-b-2 border-transparent" data-target="admin-settings">Tetapan</button>
+                        <button onclick="logoutAdmin()" class="text-gray-300 hover:text-white text-sm font-medium py-2 ml-4 border-l border-gray-600 pl-4"><i class="fa-solid fa-right-from-bracket"></i> Keluar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-4 mt-8">
+                
+                <!-- Tab: Registrations -->
+                <div id="admin-registrations" class="admin-tab-content">
+                    <!-- Stats -->
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8 text-center" id="admin-stats">
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                            <p class="text-xs text-gray-500 uppercase font-bold mb-1">Total Kutipan</p>
+                            <p class="text-xl font-black text-pink-600" id="stat-revenue">RM 0</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                            <p class="text-xs text-gray-500 uppercase font-bold mb-1">Total Peserta</p>
+                            <p class="text-xl font-black text-dark" id="stat-participants">0</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                            <p class="text-xs text-gray-500 uppercase font-bold mb-1">Disahkan</p>
+                            <p class="text-xl font-black text-green-500" id="stat-approved">0</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                            <p class="text-xs text-gray-500 uppercase font-bold mb-1">Menunggu</p>
+                            <p class="text-xl font-black text-yellow-500" id="stat-pending">0</p>
+                        </div>
+                         <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                            <p class="text-xs text-gray-500 uppercase font-bold mb-1">Hadir (Check-In)</p>
+                            <p class="text-xl font-black text-blue-500" id="stat-checkedin">0</p>
+                        </div>
+                    </div>
+
+                    <!-- Actions & Table -->
+                    <div class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
+                        <div class="p-4 border-b bg-gray-50 flex justify-between items-center flex-wrap gap-4">
+                            <div class="flex gap-2">
+                                <input type="text" id="admin-search" placeholder="Cari ID/Nama..." class="px-3 py-2 border rounded-md text-sm w-48" onkeyup="filterAdminTable()">
+                                <select id="admin-filter-status" class="px-3 py-2 border rounded-md text-sm" onchange="filterAdminTable()">
+                                    <option value="all">Semua Status</option>
+                                    <option value="pending">Menunggu</option>
+                                    <option value="approved">Disahkan</option>
+                                    <option value="rejected">Ditolak</option>
+                                </select>
+                            </div>
+                            <button onclick="exportToCSV()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-semibold transition">
+                                <i class="fa-solid fa-file-csv mr-1"></i> Export CSV
+                            </button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse text-sm">
+                                <thead>
+                                    <tr class="bg-gray-100 text-gray-600 border-b">
+                                        <th class="p-3 font-semibold">ID / Tarikh</th>
+                                        <th class="p-3 font-semibold">Nama Ketua / Tel</th>
+                                        <th class="p-3 font-semibold text-center">Peserta</th>
+                                        <th class="p-3 font-semibold text-right">Bayaran</th>
+                                        <th class="p-3 font-semibold text-center">Status</th>
+                                        <th class="p-3 font-semibold text-center">Tindakan</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-table-body" class="divide-y divide-gray-200">
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab: Settings -->
+                <div id="admin-settings" class="admin-tab-content hidden">
+                    <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6 max-w-2xl">
+                        <h3 class="text-xl font-bold mb-4 border-b pb-2">Maklumat Bank (Transfer)</h3>
+                        <div class="space-y-4 mb-8">
+                            <div><label class="block text-sm mb-1">Nama Bank</label><input type="text" id="set-bank-name" class="w-full border p-2 rounded"></div>
+                            <div><label class="block text-sm mb-1">No. Akaun</label><input type="text" id="set-bank-acc" class="w-full border p-2 rounded"></div>
+                            <div><label class="block text-sm mb-1">Nama Pemegang</label><input type="text" id="set-bank-holder" class="w-full border p-2 rounded"></div>
+                        </div>
+                        <button onclick="saveAdminSettings()" class="bg-dark text-white px-6 py-2 rounded-md font-bold">Simpan Tetapan</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Receipt / Proof Modal -->
+    <div id="modal-proof" class="fixed inset-0 bg-black bg-opacity-75 z-[100] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl max-w-md w-full overflow-hidden shadow-2xl">
+            <div class="flex justify-between items-center p-4 border-b">
+                <h3 class="font-bold text-lg">Bukti Pembayaran</h3>
+                <button onclick="closeModal('modal-proof')" class="text-gray-500 hover:text-red-500"><i class="fa-solid fa-times text-xl"></i></button>
+            </div>
+            <div class="p-4 text-center">
+                <img id="modal-proof-img" src="" alt="Resit" class="max-w-full h-auto max-h-[60vh] mx-auto rounded border">
+                <p class="mt-4 text-sm font-mono bg-gray-100 p-2 rounded" id="modal-proof-ref"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Check-in / Details Modal -->
+    <div id="modal-details" class="fixed inset-0 bg-black bg-opacity-75 z-[100] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl">
+            <div class="flex justify-between items-center p-4 border-b bg-gray-50">
+                <h3 class="font-bold text-lg" id="mdl-title">Maklumat Kumpulan</h3>
+                <button onclick="closeModal('modal-details')" class="text-gray-500 hover:text-red-500"><i class="fa-solid fa-times text-xl"></i></button>
+            </div>
+            <div class="p-4 overflow-y-auto flex-grow text-sm" id="mdl-content">
+                <!-- dynamic -->
+            </div>
+             <div class="p-4 border-t bg-gray-50 text-right space-x-2" id="mdl-actions">
+                <!-- dynamic -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Certificate Print Area (Hidden normally) -->
+    <div id="certificate-print-area" class="hidden bg-white w-[297mm] h-[210mm] absolute top-0 left-0">
+        <!-- Injected via JS when printing -->
+    </div>
+
+    <footer class="bg-white border-t border-gray-200 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 py-8 text-center sm:flex sm:justify-between sm:items-center">
+            <p class="text-gray-500 text-sm">© 2026 Pink October Walk. Hak Cipta Terpelihara.</p>
+            <div class="mt-4 sm:mt-0 flex justify-center space-x-4 text-gray-400">
+                <a href="#" class="hover:text-pink-500 transition"><i class="fa-brands fa-facebook text-xl"></i></a>
+                <a href="#" class="hover:text-pink-500 transition"><i class="fa-brands fa-instagram text-xl"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <div id="toast-container"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, setDoc, getDoc, onSnapshot, updateDoc, serverTimestamp, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global Canvas Env Variables
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'pow-app-2026';
+        let firebaseConfig = {};
+        try { firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}'); } 
+        catch(e) { console.warn("Using default dummy config for local testing"); }
+        
+        // Fallback for local testing if outside Canvas env
+        if(Object.keys(firebaseConfig).length === 0) {
+           firebaseConfig = { apiKey: "dummy", projectId: "dummy" }; // Won't work without actual config, but prevents crash on load
+        }
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        let currentUserUid = null;
+
+        // Constants & Data Models
+        const DATA_COLLECTION = `registrations`; // Stored in public to allow status checks without complex rules for MVP
+        const SETTINGS_DOC = `pow-settings`;
+        
+        // Use RULE 1 strict paths
+        const getCollRef = () => collection(db, 'artifacts', appId, 'public', 'data', DATA_COLLECTION);
+        const getSettingsRef = () => doc(db, 'artifacts', appId, 'public', 'data', 'settings', SETTINGS_DOC);
+
+        const PACKAGES = {
+            A: { id: 'A', name: 'Baju Muslimah', price: 50, desc: 'Baju Muslimah, Bib, Medal, e-Sijil', needsSize: true, type: 'muslimah', img: 'fa-person-dress' },
+            B: { id: 'B', name: 'Baju T-Shirt', price: 40, desc: 'Baju T-Shirt (Pendek/Panjang), Bib, Medal, e-Sijil', needsSize: true, needsSleeve: true, type: 'standard', img: 'fa-shirt' },
+            C: { id: 'C', name: 'Baju Kanak-Kanak', price: 35, desc: 'Baju (Pendek/Panjang), Bib, Medal, e-Sijil', needsSize: true, needsSleeve: true, type: 'kids', img: 'fa-child-reaching' },
+            D: { id: 'D', name: 'Bib Sahaja', price: 20, desc: 'Bib, Medal, e-Sijil', needsSize: false, img: 'fa-address-card' },
+            E: { id: 'E', name: 'Penyertaan', price: 5, desc: 'Penyertaan Sahaja, e-Sijil', needsSize: false, img: 'fa-person-walking' }
+        };
+
+        const SIZES = {
+            muslimah: ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'],
+            standard: ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'],
+            kids: ['2-3 thn', '4-5 thn', '6-7 thn', '8-9 thn', '10-11 thn', '12-13 thn']
+        };
+
+        let currentRegType = 'individual';
+        let participantsData = [ generateEmptyParticipant(1) ];
+        let adminUnsubscribe = null;
+        let allRegistrations = [];
+
+        window.showToast = (msg, type='success') => {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `<div><i class="fa-solid ${type==='success'?'fa-circle-check text-green-500':'fa-circle-exclamation text-red-500'} mr-2"></i> ${msg}</div>`;
+            container.appendChild(toast);
+            setTimeout(() => { toast.style.animation = 'fadeOut 0.3s ease-out forwards'; setTimeout(()=>toast.remove(), 300); }, 3000);
+        };
+
+        window.navigate = (viewId) => {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden-view'));
+            document.getElementById(`view-${viewId}`).classList.remove('hidden-view');
+            window.scrollTo(0,0);
+            if(viewId === 'home') renderPackages();
+        };
+
+        window.toggleMobileMenu = () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        };
+
+        function generateId() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let str = '';
+            for(let i=0; i<5; i++) str += chars.charAt(Math.floor(Math.random() * chars.length));
+            return `POW-${str}`;
+        }
+
+        window.closeModal = (id) => { document.getElementById(id).classList.add('hidden'); };
+
+        async function initApp() {
+            // Setup Auth
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    currentUserUid = user.uid;
+                    await loadSettings();
+                    navigate('home');
+                    document.getElementById('app-loader').style.display = 'none';
+                }
+            });
+
+            // Handle custom token if available in env, else anonymous
+            const token = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+            if (token) {
+                try { await signInWithCustomToken(auth, token); } 
+                catch (e) { console.error("Custom token failed, falling back to anon", e); signInAnonymously(auth); }
+            } else {
+                signInAnonymously(auth);
+            }
+
+            setupCountdown();
+            renderPackages();
+        }
+
+        async function loadSettings() {
+            if(!currentUserUid) return;
+            try {
+                const docSnap = await getDoc(getSettingsRef());
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    document.getElementById('admin-bank-name').innerText = data.bankName || 'Bank Islam';
+                    document.getElementById('admin-bank-acc').innerText = data.bankAcc || '1234567890';
+                    document.getElementById('admin-bank-holder').innerText = data.bankHolder || 'Penganjur POW';
+                    
+                    // Pre-fill admin inputs if logged in
+                    document.getElementById('set-bank-name').value = data.bankName || 'Bank Islam';
+                    document.getElementById('set-bank-acc').value = data.bankAcc || '1234567890';
+                    document.getElementById('set-bank-holder').value = data.bankHolder || 'Penganjur POW';
+                }
+            } catch(e) { console.log("Settings not initialized yet."); }
+        }
+
+        function setupCountdown() {
+            const eventDate = new Date("Oct 31, 2026 07:00:00").getTime();
+            setInterval(() => {
+                const now = new Date().getTime();
+                const distance = eventDate - now;
+                if (distance < 0) return;
+                document.getElementById('cd-days').innerText = String(Math.floor(distance / (1000 * 60 * 60 * 24))).padStart(2, '0');
+                document.getElementById('cd-hours').innerText = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+                document.getElementById('cd-mins').innerText = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+                document.getElementById('cd-secs').innerText = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
+            }, 1000);
+        }
+
+        function renderPackages() {
+            const container = document.getElementById('package-cards-container');
+            const contD = document.getElementById('package-card-d');
+            const contE = document.getElementById('package-card-e');
+            container.innerHTML = ''; contD.innerHTML = ''; contE.innerHTML = '';
+
+            const createCard = (pkg, key) => `
+                <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6 flex flex-col h-full transform transition hover:-translate-y-1 hover:shadow-xl relative overflow-hidden">
+                    ${key==='A' ? '<div class="absolute top-0 right-0 bg-pink-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">Popular</div>' : ''}
+                    <div class="w-14 h-14 bg-pink-50 rounded-full flex items-center justify-center text-pink-600 text-2xl mb-4 mx-auto"><i class="fa-solid ${pkg.img}"></i></div>
+                    <h3 class="text-xl font-bold text-center text-dark mb-1">Pakej ${key}</h3>
+                    <p class="text-center font-medium text-gray-500 mb-4">${pkg.name}</p>
+                    <div class="text-center mb-6"><span class="text-3xl font-black text-pink-600">RM${pkg.price}</span><span class="text-gray-400 text-sm">/pax</span></div>
+                    <ul class="text-sm text-gray-600 space-y-3 mb-8 flex-grow">
+                        ${pkg.desc.split(',').map(item => `<li><i class="fa-solid fa-check text-green-500 mr-2"></i>${item.trim()}</li>`).join('')}
+                    </ul>
+                    <button onclick="startRegistration('${key}')" class="w-full mt-auto py-3 rounded-lg border-2 border-pink-500 text-pink-600 font-bold hover:bg-pink-500 hover:text-white transition">Pilih Pakej ${key}</button>
+                </div>
+            `;
+
+            Object.entries(PACKAGES).forEach(([key, pkg]) => {
+                if(key==='A'||key==='B'||key==='C') container.innerHTML += createCard(pkg, key);
+                else if(key==='D') contD.innerHTML = createCard(pkg, key);
+                else if(key==='E') contE.innerHTML = createCard(pkg, key);
+            });
+        }
+
+        window.startRegistration = (pkgKey) => {
+            currentRegType = 'individual';
+            participantsData = [ generateEmptyParticipant(1, pkgKey) ];
+            navigate('register');
+            renderRegistrationForm();
+        };
+
+        function generateEmptyParticipant(id, pkg='A') {
+            return { id, name: '', ic: '', gender: 'Lelaki', phone: '', pkg, size: '', sleeve: 'Pendek' };
+        }
+
+        window.setRegType = (type) => {
+            currentRegType = type;
+            const btnInd = document.getElementById('btn-type-ind');
+            const btnGrp = document.getElementById('btn-type-grp');
+            const addBtn = document.getElementById('group-add-btn-container');
+
+            if(type === 'individual') {
+                btnInd.className = "px-4 py-2 bg-pink-600 text-white rounded-md text-sm font-semibold transition";
+                btnGrp.className = "px-4 py-2 bg-gray-200 text-gray-700 hover:bg-gray-300 rounded-md text-sm font-semibold transition";
+                participantsData = [ participantsData[0] ]; // Keep only first
+                addBtn.classList.add('hidden');
+            } else {
+                btnGrp.className = "px-4 py-2 bg-pink-600 text-white rounded-md text-sm font-semibold transition";
+                btnInd.className = "px-4 py-2 bg-gray-200 text-gray-700 hover:bg-gray-300 rounded-md text-sm font-semibold transition";
+                addBtn.classList.remove('hidden');
+            }
+            renderRegistrationForm();
+        };
+
+        window.addParticipantForm = () => {
+            if(participantsData.length >= 10) return showToast('Maksimum 10 peserta per kumpulan.', 'error');
+            const newId = participantsData.length ? Math.max(...participantsData.map(p=>p.id)) + 1 : 1;
+            participantsData.push(generateEmptyParticipant(newId));
+            renderRegistrationForm();
+        };
+
+        window.removeParticipantForm = (id) => {
+            if(participantsData.length <= 1) return;
+            participantsData = participantsData.filter(p => p.id !== id);
+            renderRegistrationForm();
+        };
+
+        window.updateParticipantData = (id, field, value) => {
+            const p = participantsData.find(p => p.id === id);
+            if(p) {
+                p[field] = value;
+                if(field === 'pkg') renderRegistrationForm(); // Re-render to show/hide size fields
+                else calculateTotal(); // Just update total if other fields change
+            }
+        };
+
+        function renderRegistrationForm() {
+            const container = document.getElementById('participants-container');
+            container.innerHTML = '';
+            
+            let pkgOptions = Object.entries(PACKAGES).map(([k, v]) => `<option value="${k}">Pakej ${k} (RM${v.price}) - ${v.name}</option>`).join('');
+
+            participantsData.forEach((p, index) => {
+                const pkgInfo = PACKAGES[p.pkg];
+                let sizeHtml = '';
+                let sleeveHtml = '';
+
+                if (pkgInfo.needsSize) {
+                    const sizeOptions = SIZES[pkgInfo.type].map(s => `<option value="${s}" ${p.size===s?'selected':''}>${s}</option>`).join('');
+                    if(!p.size) p.size = SIZES[pkgInfo.type][0]; // set default if empty
+                    
+                    sizeHtml = `
+                        <div class="col-span-1">
+                            <label class="block text-xs font-medium text-gray-600 mb-1">Saiz Baju *</label>
+                            <select onchange="updateParticipantData(${p.id}, 'size', this.value)" class="w-full px-3 py-2 border rounded-md text-sm bg-white" required>
+                                ${sizeOptions}
+                            </select>
+                        </div>
+                    `;
+                }
+
+                if (pkgInfo.needsSleeve) {
+                    sleeveHtml = `
+                        <div class="col-span-1">
+                            <label class="block text-xs font-medium text-gray-600 mb-1">Jenis Lengan</label>
+                            <select onchange="updateParticipantData(${p.id}, 'sleeve', this.value)" class="w-full px-3 py-2 border rounded-md text-sm bg-white">
+                                <option value="Pendek" ${p.sleeve==='Pendek'?'selected':''}>Pendek</option>
+                                <option value="Panjang" ${p.sleeve==='Panjang'?'selected':''}>Panjang</option>
+                            </select>
+                        </div>
+                    `;
+                }
+
+                const removeBtn = index > 0 ? `<button type="button" onclick="removeParticipantForm(${p.id})" class="text-red-500 hover:text-red-700 text-sm font-semibold"><i class="fa-solid fa-trash"></i> Buang</button>` : '';
+
+                const html = `
+                    <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm relative">
+                        <div class="flex justify-between items-center mb-4 pb-2 border-b">
+                            <h4 class="font-bold text-pink-600">Peserta ${index + 1} ${index===0?'(Ketua)':''}</h4>
+                            ${removeBtn}
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 mb-1">Nama Penuh (Untuk Sijil) *</label>
+                                <input type="text" value="${p.name}" onchange="updateParticipantData(${p.id}, 'name', this.value)" class="w-full px-3 py-2 border rounded-md text-sm uppercase" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 mb-1">No. IC / Passport *</label>
+                                <input type="text" value="${p.ic}" onchange="updateParticipantData(${p.id}, 'ic', this.value)" class="w-full px-3 py-2 border rounded-md text-sm" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 mb-1">No. Telefon ${index===0?'*':''}</label>
+                                <input type="tel" value="${p.phone}" onchange="updateParticipantData(${p.id}, 'phone', this.value)" class="w-full px-3 py-2 border rounded-md text-sm" ${index===0?'required':''}>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 mb-1">Jantina</label>
+                                <select onchange="updateParticipantData(${p.id}, 'gender', this.value)" class="w-full px-3 py-2 border rounded-md text-sm bg-white">
+                                    <option value="Lelaki" ${p.gender==='Lelaki'?'selected':''}>Lelaki</option>
+                                    <option value="Perempuan" ${p.gender==='Perempuan'?'selected':''}>Perempuan</option>
+                                </select>
+                            </div>
+                            <div class="col-span-1 md:col-span-2 mt-2 pt-2 border-t">
+                                <label class="block text-xs font-bold text-dark mb-2">Pilihan Pakej *</label>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                    <div class="col-span-1">
+                                        <select onchange="updateParticipantData(${p.id}, 'pkg', this.value)" class="w-full px-3 py-2 border rounded-md font-semibold text-pink-700 bg-pink-50" required>
+                                            ${Object.entries(PACKAGES).map(([k, v]) => `<option value="${k}" ${p.pkg===k?'selected':''}>Pakej ${k} (RM${v.price})</option>`).join('')}
+                                        </select>
+                                    </div>
+                                    ${sizeHtml}
+                                    ${sleeveHtml}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', html);
+            });
+            calculateTotal();
+        }
+
+        let totalAmount = 0;
+        function calculateTotal() {
+            totalAmount = participantsData.reduce((sum, p) => sum + PACKAGES[p.pkg].price, 0);
+            document.getElementById('payment-total-display').innerText = `RM ${totalAmount}`;
+            document.getElementById('payment-req-amount').innerText = totalAmount;
+            document.getElementById('payment-count-display').innerText = participantsData.length;
+        }
+
+        window.goToStep2 = () => {
+            // Basic validation
+            let valid = true;
+            participantsData.forEach((p, i) => {
+                if(!p.name || !p.ic || (i===0 && !p.phone)) valid = false;
+            });
+            if(!valid) return showToast("Sila lengkapkan maklumat wajib (*)", "error");
+
+            document.getElementById('reg-step-1').classList.add('hidden');
+            document.getElementById('reg-step-2').classList.remove('hidden');
+            
+            document.getElementById('step1-ind').className = "w-10 h-10 rounded-full bg-green-500 text-white flex items-center justify-center font-bold shadow-md";
+            document.getElementById('step1-ind').innerHTML = '<i class="fa-solid fa-check"></i>';
+            document.getElementById('step2-ind').className = "w-10 h-10 rounded-full bg-pink-600 text-white flex items-center justify-center font-bold shadow-md";
+            
+            selectPaymentMethod('qr'); // default
+        };
+
+        window.goToStep1 = () => {
+            document.getElementById('reg-step-2').classList.add('hidden');
+            document.getElementById('reg-step-1').classList.remove('hidden');
+            document.getElementById('step2-ind').className = "w-10 h-10 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center font-bold border-2 border-white shadow-sm";
+            document.getElementById('step1-ind').className = "w-10 h-10 rounded-full bg-pink-600 text-white flex items-center justify-center font-bold shadow-md";
+            document.getElementById('step1-ind').innerHTML = '1';
+        };
+
+        let selectedPayment = 'qr';
+        window.selectPaymentMethod = (method) => {
+            selectedPayment = method;
+            document.getElementById('pm-qr').classList.remove('border-pink-500', 'bg-pink-50');
+            document.getElementById('pm-bank').classList.remove('border-pink-500', 'bg-pink-50');
+            document.getElementById('pm-qr-icon').classList.remove('text-pink-500');
+            document.getElementById('pm-bank-icon').classList.remove('text-pink-500');
+            document.getElementById('qr-code-container').classList.add('hidden');
+            document.getElementById('bank-details-container').classList.add('hidden');
+
+            const activeCard = document.getElementById(`pm-${method}`);
+            activeCard.classList.add('border-pink-500', 'bg-pink-50');
+            document.getElementById(`pm-${method}-icon`).classList.add('text-pink-500');
+            
+            if(method === 'qr') document.getElementById('qr-code-container').classList.remove('hidden');
+            if(method === 'bank') document.getElementById('bank-details-container').classList.remove('hidden');
+        };
+
+        async function compressImage(file) {
+            return new Promise((resolve) => {
+                if(!file || !file.type.startsWith('image/')) resolve(null); // handle PDF separately or deny for MVP canvas compression
+                
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = event => {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.onload = () => {
+                        const canvas = document.getElementById('resize-canvas');
+                        const ctx = canvas.getContext('2d');
+                        // Resize to max 800px width
+                        const scale = Math.min(800 / img.width, 1);
+                        canvas.width = img.width * scale;
+                        canvas.height = img.height * scale;
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        resolve(canvas.toDataURL('image/jpeg', 0.6)); // compress
+                    }
+                }
+            });
+        }
+
+        window.submitRegistration = async () => {
+            if(!currentUserUid) { showToast("Sila tunggu. Sedang menyambung ke pangkalan data.", "error"); return; }
+            
+            const dateStr = document.getElementById('pay-date').value;
+            const refStr = document.getElementById('pay-ref').value;
+            const fileInput = document.getElementById('pay-file');
+
+            if(!dateStr || !refStr || !fileInput.files.length) {
+                return showToast("Sila lengkapkan butiran muat naik bukti pembayaran.", "error");
+            }
+
+            const btn = document.getElementById('btn-submit-reg');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Memproses...';
+
+            try {
+                let base64Image = null;
+                const file = fileInput.files[0];
+                if(file.type.startsWith('image/')) {
+                    base64Image = await compressImage(file);
+                } else if (file.type === 'application/pdf') {
+                    // For MVP without storage bucket, we might just store a placeholder or reject. 
+                    // Let's enforce images only for simplicity of this base64 MVP approach
+                    btn.disabled = false;
+                    btn.innerHTML = 'Hantar Pendaftaran';
+                    return showToast("Sila muat naik format gambar (JPG/PNG). PDF tidak disokong untuk demo ini.", "error");
+                }
+
+                const regId = generateId();
+                const docRef = doc(getCollRef(), regId);
+                
+                const data = {
+                    regId,
+                    type: currentRegType,
+                    participants: participantsData,
+                    totalAmount,
+                    payment: {
+                        method: selectedPayment,
+                        date: dateStr,
+                        ref: refStr,
+                        proofBase64: base64Image
+                    },
+                    status: 'pending', // pending, approved, rejected
+                    checkIn: false,
+                    kitCollected: false,
+                    createdAt: serverTimestamp(),
+                    userId: currentUserUid // Who created it
+                };
+
+                await setDoc(docRef, data);
+
+                // Show Success Step
+                document.getElementById('reg-step-2').classList.add('hidden');
+                document.getElementById('reg-step-3').classList.remove('hidden');
+                
+                document.getElementById('step2-ind').className = "w-10 h-10 rounded-full bg-green-500 text-white flex items-center justify-center font-bold shadow-md";
+                document.getElementById('step2-ind').innerHTML = '<i class="fa-solid fa-check"></i>';
+                document.getElementById('step3-ind').className = "w-10 h-10 rounded-full bg-pink-600 text-white flex items-center justify-center font-bold shadow-md";
+                
+                document.getElementById('success-reg-id').innerText = regId;
+                document.getElementById('success-name').innerText = participantsData[0].name.toUpperCase();
+                document.getElementById('success-amount').innerText = `RM ${totalAmount}`;
+
+            } catch(e) {
+                console.error(e);
+                showToast("Ralat pendaftaran: " + e.message, "error");
+                btn.disabled = false;
+                btn.innerHTML = 'Hantar Pendaftaran <i class="fa-solid fa-check-circle ml-2"></i>';
+            }
+        };
+
+        window.checkStatus = async () => {
+            if(!currentUserUid) return;
+            const input = document.getElementById('search-input').value.trim().toUpperCase();
+            if(!input) return showToast("Sila masukkan ID atau No. Tel", "error");
+
+            const btn = event.currentTarget;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+
+            try {
+                // Rule 2: No complex queries. Fetch all and filter in memory.
+                const q = query(getCollRef());
+                const querySnapshot = await getDocs(q);
+                let foundDoc = null;
+
+                querySnapshot.forEach((doc) => {
+                    const d = doc.data();
+                    if(d.regId === input || (d.participants && d.participants[0].phone === input)) {
+                        foundDoc = d;
+                    }
+                });
+
+                const resDiv = document.getElementById('status-result');
+                if(foundDoc) {
+                    resDiv.classList.remove('hidden');
+                    let badge = '';
+                    if(foundDoc.status === 'pending') badge = '<span class="bg-yellow-100 text-yellow-800 text-xs font-bold px-3 py-1 rounded-full"><i class="fa-solid fa-clock mr-1"></i> Menunggu Pengesahan</span>';
+                    if(foundDoc.status === 'approved') badge = '<span class="bg-green-100 text-green-800 text-xs font-bold px-3 py-1 rounded-full"><i class="fa-solid fa-check mr-1"></i> Pendaftaran Disahkan</span>';
+                    if(foundDoc.status === 'rejected') badge = '<span class="bg-red-100 text-red-800 text-xs font-bold px-3 py-1 rounded-full"><i class="fa-solid fa-times mr-1"></i> Batal / Ditolak</span>';
+
+                    let pList = foundDoc.participants.map((p,i) => `
+                        <div class="flex justify-between items-center py-2 border-b last:border-0 text-sm">
+                            <div><span class="font-bold text-gray-700">${i+1}. ${p.name.toUpperCase()}</span> <br><span class="text-xs text-gray-500">Pakej ${p.pkg} ${p.size ? `(${p.size})` : ''}</span></div>
+                        </div>
+                    `).join('');
+
+                    resDiv.innerHTML = `
+                        <div class="bg-white p-6 rounded-2xl shadow border-l-4 border-pink-500 text-left">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <p class="text-sm text-gray-500">ID Pendaftaran</p>
+                                    <h3 class="text-2xl font-black text-dark tracking-widest">${foundDoc.regId}</h3>
+                                </div>
+                                ${badge}
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <h4 class="font-bold text-sm mb-2 text-gray-600 border-b pb-1">Senarai Peserta</h4>
+                                ${pList}
+                            </div>
+                            ${foundDoc.status === 'approved' ? `
+                                <div class="bg-pink-50 p-4 rounded-lg flex items-center justify-between border border-pink-100">
+                                    <div>
+                                        <p class="font-bold text-pink-700 text-sm"><i class="fa-solid fa-gift mr-1"></i> Kit Acara</p>
+                                        <p class="text-xs text-pink-600">${foundDoc.kitCollected ? 'Telah Diambil' : 'Belum Diambil'}</p>
+                                    </div>
+                                    <button onclick="printCertificate('${foundDoc.regId}', '${foundDoc.participants[0].name.replace(/'/g, "\\'")}')" class="bg-pink-600 hover:bg-pink-700 text-white px-3 py-1.5 rounded text-xs font-bold shadow">
+                                        <i class="fa-solid fa-download mr-1"></i> Sijil
+                                    </button>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                } else {
+                    resDiv.classList.remove('hidden');
+                    resDiv.innerHTML = `<div class="bg-red-50 text-red-600 p-4 rounded-xl text-center border border-red-100"><i class="fa-solid fa-triangle-exclamation mb-2 text-2xl"></i><br>Rekod tidak dijumpai. Sila semak semula ID atau No. Tel.</div>`;
+                }
+            } catch(e) { console.error(e); showToast("Ralat carian", "error"); }
+            
+            btn.innerHTML = originalText;
+        };
+
+        window.attemptAdminLogin = () => {
+            const pin = document.getElementById('admin-pin').value;
+            if(pin === 'admin2026') {
+                navigate('admin-dashboard');
+                initAdminData();
+            } else {
+                showToast("PIN Salah", "error");
+            }
+        };
+
+        window.logoutAdmin = () => {
+            if(adminUnsubscribe) adminUnsubscribe();
+            document.getElementById('admin-pin').value = '';
+            navigate('admin-login');
+        };
+
+        window.switchAdminTab = (tabId) => {
+            document.querySelectorAll('.admin-tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`admin-${tabId}`).classList.remove('hidden');
+            
+            document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+                btn.classList.remove('border-pink-500', 'text-pink-400');
+                btn.classList.add('border-transparent');
+            });
+            event.target.classList.remove('border-transparent');
+            event.target.classList.add('border-pink-500', 'text-pink-400');
+        };
+
+        function initAdminData() {
+            if(!currentUserUid) return;
+            const q = query(getCollRef(), orderBy('createdAt', 'desc'));
+            
+            // Realtime listener
+            adminUnsubscribe = onSnapshot(q, (snapshot) => {
+                allRegistrations = [];
+                let stats = { rev: 0, part: 0, app: 0, pend: 0, cin: 0 };
+                
+                snapshot.forEach(doc => {
+                    const d = doc.data();
+                    allRegistrations.push(d);
+                    
+                    stats.part += d.participants.length;
+                    if(d.status === 'approved') {
+                        stats.app++;
+                        stats.rev += d.totalAmount;
+                    }
+                    if(d.status === 'pending') stats.pend++;
+                    if(d.checkIn) stats.cin++;
+                });
+
+                // Update Stats UI
+                document.getElementById('stat-revenue').innerText = `RM ${stats.rev}`;
+                document.getElementById('stat-participants').innerText = stats.part;
+                document.getElementById('stat-approved').innerText = stats.app;
+                document.getElementById('stat-pending').innerText = stats.pend;
+                document.getElementById('stat-checkedin').innerText = stats.cin;
+
+                renderAdminTable(allRegistrations);
+            }, (error) => { console.error("Snapshot error:", error); });
+        }
+
+        window.filterAdminTable = () => {
+            const search = document.getElementById('admin-search').value.toLowerCase();
+            const status = document.getElementById('admin-filter-status').value;
+            
+            const filtered = allRegistrations.filter(r => {
+                const matchSearch = r.regId.toLowerCase().includes(search) || r.participants[0].name.toLowerCase().includes(search) || (r.participants[0].phone && r.participants[0].phone.includes(search));
+                const matchStatus = status === 'all' || r.status === status;
+                return matchSearch && matchStatus;
+            });
+            renderAdminTable(filtered);
+        };
+
+        function renderAdminTable(data) {
+            const tbody = document.getElementById('admin-table-body');
+            tbody.innerHTML = '';
+            
+            data.forEach(r => {
+                const p1 = r.participants[0];
+                let statBadge = '';
+                if(r.status === 'pending') statBadge = '<span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">Menunggu</span>';
+                if(r.status === 'approved') statBadge = '<span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Sah</span>';
+                if(r.status === 'rejected') statBadge = '<span class="bg-red-100 text-red-800 px-2 py-1 rounded text-xs">Ditolak</span>';
+                
+                const date = r.createdAt ? new Date(r.createdAt.seconds * 1000).toLocaleDateString('ms-MY') : '-';
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-gray-50 transition";
+                tr.innerHTML = `
+                    <td class="p-3 border-b"><span class="font-bold font-mono text-pink-600">${r.regId}</span><br><span class="text-xs text-gray-500">${date}</span></td>
+                    <td class="p-3 border-b"><span class="font-semibold text-gray-700">${p1.name}</span><br><span class="text-xs text-gray-500">${p1.phone || '-'}</span></td>
+                    <td class="p-3 border-b text-center"><span class="bg-gray-200 px-2 py-1 rounded-full text-xs font-bold">${r.participants.length} pax</span></td>
+                    <td class="p-3 border-b text-right font-bold">RM ${r.totalAmount}</td>
+                    <td class="p-3 border-b text-center">${statBadge}</td>
+                    <td class="p-3 border-b text-center">
+                        <button onclick="viewAdminDetails('${r.regId}')" class="text-blue-500 hover:bg-blue-50 p-1.5 rounded transition" title="Lihat"><i class="fa-solid fa-eye"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        window.viewAdminDetails = (regId) => {
+            const r = allRegistrations.find(x => x.regId === regId);
+            if(!r) return;
+
+            document.getElementById('mdl-title').innerHTML = `Maklumat <span class="text-pink-600 font-mono">${r.regId}</span>`;
+            
+            let pList = r.participants.map((p,i) => `
+                <div class="bg-white p-3 rounded border mb-2">
+                    <p class="font-bold text-sm">${i+1}. ${p.name} <span class="text-gray-400 font-normal ml-2">IC: ${p.ic}</span></p>
+                    <p class="text-xs text-gray-600 mt-1">Pakej: <b>${p.pkg}</b> ${p.size ? `| Saiz: <b>${p.size}</b>` : ''} ${p.sleeve ? `| Lengan: <b>${p.sleeve}</b>` : ''}</p>
+                </div>
+            `).join('');
+
+            document.getElementById('mdl-content').innerHTML = `
+                <div class="grid grid-cols-2 gap-4 mb-4 bg-gray-100 p-3 rounded">
+                    <div>
+                        <p class="text-xs text-gray-500">Kaedah Bayaran</p>
+                        <p class="font-bold">${r.payment.method.toUpperCase()}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500">Jumlah/Tarikh</p>
+                        <p class="font-bold text-pink-600">RM ${r.totalAmount} <span class="text-gray-500 text-xs">(${r.payment.date})</span></p>
+                    </div>
+                    <div class="col-span-2">
+                        <button onclick="showProofModal('${r.payment.proofBase64}', '${r.payment.ref}')" class="text-sm bg-indigo-50 text-indigo-600 px-3 py-1 rounded border border-indigo-200 hover:bg-indigo-100"><i class="fa-solid fa-image mr-1"></i> Lihat Resit (Ref: ${r.payment.ref})</button>
+                    </div>
+                </div>
+                <h4 class="font-bold text-gray-700 mb-2">Senarai Peserta</h4>
+                ${pList}
+            `;
+
+            let actionsHtml = '';
+            if(r.status === 'pending') {
+                actionsHtml = `
+                    <button onclick="updateRegStatus('${r.regId}', 'rejected')" class="bg-red-100 text-red-600 px-4 py-2 rounded font-semibold hover:bg-red-200">Tolak</button>
+                    <button onclick="updateRegStatus('${r.regId}', 'approved')" class="bg-green-600 text-white px-4 py-2 rounded font-semibold hover:bg-green-700">Sahkan Bayaran</button>
+                `;
+            } else if (r.status === 'approved') {
+                const ciBtn = r.checkIn ? `<button onclick="updateCheckIn('${r.regId}', false)" class="bg-yellow-100 text-yellow-700 px-4 py-2 rounded font-semibold">Batal Check-In</button>` : `<button onclick="updateCheckIn('${r.regId}', true)" class="bg-blue-600 text-white px-4 py-2 rounded font-semibold"><i class="fa-solid fa-qrcode mr-1"></i> Check-In (Hadir)</button>`;
+                
+                const kitBtn = r.kitCollected ? `<span class="px-4 py-2 text-green-600 font-bold"><i class="fa-solid fa-check"></i> Kit Diambil</span>` : `<button onclick="updateKit('${r.regId}', true)" class="bg-pink-100 text-pink-700 px-4 py-2 rounded font-semibold border border-pink-300">Tandakan Kit Diambil</button>`;
+                
+                actionsHtml = `
+                    <button onclick="updateRegStatus('${r.regId}', 'pending')" class="text-gray-400 text-xs mr-auto underline">Set Menunggu</button>
+                    ${kitBtn}
+                    ${ciBtn}
+                `;
+            }
+
+            document.getElementById('mdl-actions').innerHTML = actionsHtml;
+            document.getElementById('modal-details').classList.remove('hidden');
+        };
+
+        window.showProofModal = (imgSrc, ref) => {
+            if(!imgSrc) return showToast("Tiada imej resit.", "error");
+            document.getElementById('modal-proof-img').src = imgSrc;
+            document.getElementById('modal-proof-ref').innerText = `Ref: ${ref}`;
+            document.getElementById('modal-proof').classList.remove('hidden');
+        };
+
+        window.updateRegStatus = async (regId, status) => {
+            try {
+                await updateDoc(doc(getCollRef(), regId), { status });
+                showToast(`Status ditukar kepada ${status}`);
+                closeModal('modal-details');
+            } catch(e) { showToast(e.message, 'error'); }
+        };
+
+        window.updateCheckIn = async (regId, checkIn) => {
+             try {
+                await updateDoc(doc(getCollRef(), regId), { checkIn, attendanceTime: checkIn ? serverTimestamp() : null });
+                showToast(checkIn ? 'Berjaya Check-In' : 'Check-In Dibatalkan');
+                closeModal('modal-details');
+            } catch(e) { showToast(e.message, 'error'); }
+        };
+
+        window.updateKit = async (regId, kitCollected) => {
+             try {
+                await updateDoc(doc(getCollRef(), regId), { kitCollected });
+                showToast('Status Kit Dikemaskini');
+                closeModal('modal-details');
+            } catch(e) { showToast(e.message, 'error'); }
+        };
+
+        window.saveAdminSettings = async () => {
+             const data = {
+                 bankName: document.getElementById('set-bank-name').value,
+                 bankAcc: document.getElementById('set-bank-acc').value,
+                 bankHolder: document.getElementById('set-bank-holder').value
+             };
+             try {
+                 await setDoc(getSettingsRef(), data, {merge:true});
+                 showToast("Tetapan disimpan.");
+                 loadSettings(); // refresh UI
+             } catch(e) { showToast(e.message, 'error'); }
+        };
+
+        window.exportToCSV = () => {
+            if(allRegistrations.length === 0) return showToast("Tiada data.", "error");
+            
+            let csv = "ID,Tarikh,Status,Metode Bayar,Total RM,Nama,IC,Telefon,Jantina,Pakej,Saiz,Lengan\n";
+            allRegistrations.forEach(r => {
+                const date = r.createdAt ? new Date(r.createdAt.seconds * 1000).toLocaleDateString('ms-MY') : '';
+                r.participants.forEach(p => {
+                    // Escape commas in strings
+                    const row = [
+                        r.regId, date, r.status, r.payment.method, r.totalAmount,
+                        `"${p.name}"`, `"${p.ic}"`, `"${p.phone||''}"`, p.gender, p.pkg, p.size||'-', p.sleeve||'-'
+                    ];
+                    csv += row.join(",") + "\n";
+                });
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", "POW_Data.csv");
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+
+        window.printCertificate = (regId, name) => {
+            const printArea = document.getElementById('certificate-print-area');
+            printArea.innerHTML = `
+                <div style="width: 100%; height: 100%; padding: 40px; box-sizing: border-box; background: #fff; border: 15px solid #fce7f3; font-family: 'Inter', sans-serif; position: relative;">
+                    <div style="position: absolute; top: 20px; right: 20px; font-size: 80px; color: rgba(236,72,153,0.1);"><i class="fa-solid fa-ribbon"></i></div>
+                    <div style="text-align: center; margin-top: 50px;">
+                        <h1 style="color: #db2777; font-size: 40px; margin-bottom: 10px; font-weight: 800;">PINK OCTOBER WALK 2026</h1>
+                        <h2 style="color: #4b5563; font-size: 24px; letter-spacing: 2px; margin-bottom: 40px;">SIJIL PENYERTAAN</h2>
+                        
+                        <p style="color: #6b7280; font-size: 16px; margin-bottom: 20px;">Dengan ini diperakui bahawa</p>
+                        
+                        <h3 style="font-size: 32px; color: #1f2937; font-weight: bold; text-decoration: underline; text-underline-offset: 8px; text-transform: uppercase; margin-bottom: 30px;">${name}</h3>
+                        
+                        <p style="color: #6b7280; font-size: 16px; margin-bottom: 10px; max-width: 600px; margin-left: auto; margin-right: auto;">
+                            Telah berjaya menyertai program Pink October Walk 2026 sebagai tanda sokongan terhadap kempen kesedaran kanser payudara.
+                        </p>
+                        
+                        <div style="margin-top: 80px; display: flex; justify-content: space-around;">
+                            <div>
+                                <p style="font-weight: bold; color: #374151;">31 Oktober 2026</p>
+                                <div style="border-top: 1px solid #9ca3af; padding-top: 5px; margin-top: 5px; color: #6b7280; font-size: 12px;">Tarikh Program</div>
+                            </div>
+                            <div>
+                                <p style="font-weight: bold; color: #374151;">Pihak Penganjur</p>
+                                <div style="border-top: 1px solid #9ca3af; padding-top: 5px; margin-top: 5px; color: #6b7280; font-size: 12px;">Tandatangan</div>
+                            </div>
+                        </div>
+                        <p style="position: absolute; bottom: 20px; left: 20px; font-size: 10px; color: #9ca3af;">ID: ${regId}</p>
+                    </div>
+                </div>
+            `;
+            window.print();
+        };
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', initApp);
+
+    </script>
+</body>
+</html>
